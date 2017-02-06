@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html ng-app="uploadApp">
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	
+	  	<title>Upload Application</title>
+
+	  	<link rel="stylesheet" type="text/css" href="node_modules/angular-ui-grid/ui-grid.min.css">
+        <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="node_modules/angular/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+        <script src="node_modules/angular-ui-grid/ui-grid.min.js"></script>
+        <script src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	  	<script src="FileUploadApp.js"></script>
+
+	  	<style>
+	  		body{
+	  			background-color : #9999ff;
+	  		}
+	  		.jumbotron {
+			    background-color: #333399;
+				color: #fff;
+				margin-top: -22px;
+				padding-left: 50px;
+	  		}
+	  		.navbar{
+	  			background-color : #ffff66;
+	  		}
+	  		.navbar li{
+	  			padding : 0 20px;
+                font-size : 20px;
+	  		}
+            .navbar li a{
+                color : #6600cc !important;
+            }
+            .navbar li a:hover {
+                color : #669900 !important;
+            }
+	  		.navbar li.selected{
+	  			background-color : orange;
+	  		}
+	  		.col-lg-4{
+                background-color: white;
+                font-size: 22px;
+                margin-left: 105px;
+                width: 300px;
+                padding: 30px;
+                margin-top: 100px;
+                height: 250px;
+            }
+            .button:hover {
+                cursor : pointer;
+            }
+
+	  		
+	  	</style>
+	</head>
+
+	<body>
+
+		<nav class="navbar navbar-default">
+	  		<div class="container-fluid">
+	    		<ul ng-click = "selectList()" class="nav navbar-nav">
+			        <li ng-class="navClass('home')"><a href='#/'>Home</a></li>
+			        <li ng-class="navClass('input')"><a href='#/input'>Input Page</a></li>
+			    </ul>
+			</div>
+		</nav>
+
+		<ng-view></ng-view>
+		  
+		<!-- Template -->   
+		<script type="text/ng-template" id="/home.html">
+
+		<div class="jumbotron text-left">
+		  		<h2>Welcome to the File Upload Application</h2>
+		</div>
+<!--
+			<div ng-repeat="todo in todoList">
+		            <input type="checkbox" ng-model="todo.done"> <span ng-bind="todo.todoText"></span>
+		    </div> -->
+		  <div class="container-fluid text-center">
+			  <div class="row">
+			    <div class="col-lg-4">
+			      <span class="glyphicon glyphicon-road"></span>
+			      <h4>Navigate</h4>
+			      <p>Between the avaiable sections</p>
+			    </div>
+			    <div class="col-lg-4">
+			      <span class="glyphicon glyphicon-upload"></span>
+			      <h4>Upload</h4>
+			      <p>Select PNG, Word, and PDF files to upload</p>
+			    </div>
+			    <div class="col-lg-4">
+			      <span class="glyphicon glyphicon-tasks"></span>
+			      <h4>Maintain</h4>
+			      <p>Keep Track of Uploads</p>
+			    </div>
+			  </div>
+			</div>
+		</script>
+
+		<!-- Template --> 
+		<script type="text/ng-template" id="/input.html">
+         <div class="jumbotron text-left" ng-controller="MyCtrl">
+             <form name="myForm">
+                    <h2>Upload a new Document or Photo</h2>
+
+                  
+                    <input type="file" ngf-select ng-model="picFile" name="file"    
+                             accept="application/pdf,application/doc,application/png" ngf-max-size="2MB" required
+                             ngf-model-invalid="errorFile">
+
+                      <i ng-show="myForm.file.$error.maxSize">File too large 
+                          {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                      <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> 
+                      <br><br>
+                      <button class="button btn-danger" ng-click="picFile = null" ng-show="picFile">Remove</button>
+                      <br><br>
+                        
+                  <button class="button btn-success" ng-disabled="!myForm.$valid" 
+                              ng-click="uploadPic(picFile)">Submit File</button>
+                      <span class="progress" ng-show="picFile.progress >= 0">
+                        <div style="width:{{picFile.progress}}%" 
+                            ng-bind="picFile.progress + '%'"></div>
+                      </span>
+                      <span ng-show="picFile.result">Upload Successful</span>
+                      <span class="err" ng-show="errorMsg">{{errorMsg}}</span>             
+            </form>
+            </div>
+		</script>
+
+	</body>
+</html>
